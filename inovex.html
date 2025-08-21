@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inovex - AI Employee Onboarding</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo-icon {
+            font-size: 32px;
+            color: #8b5cf6;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #3b82f6;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: #94a3b8;
+        }
+        
+        .btn {
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 80px 0;
+        }
+        
+        .feature-card {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 15px;
+            padding: 30px;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            color: #8b5cf6;
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #e2e8f0;
+        }
+        
+        .feature-card p {
+            color: #94a3b8;
+        }
+        
+        .chatbot-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        .chatbot-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .chatbot-icon i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        .chatbot-popup {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            height: 500px;
+            background: #1e293b;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            z-index: 1001;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-header {
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-header h3 {
+            color: white;
+            font-size: 18px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message-container {
+            display: flex;
+            gap: 10px;
+            max-width: 100%;
+        }
+        
+        .message-container.user {
+            flex-direction: row-reverse;
+        }
+        
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .bot-avatar {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+        }
+        
+        .user-avatar {
+            background: #475569;
+            color: white;
+        }
+        
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            max-width: 75%;
+        }
+        
+        .message {
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+        }
+        
+        .bot-message {
+            background: #334155;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-bottom-right-radius: 5px;
+            align-self: flex-end;
+            color: white;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .message-time {
+            font-size: 11px;
+            margin-top: 4px;
+            padding: 0 8px;
+            opacity: 0.7;
+        }
+        
+        .bot-time {
+            align-self: flex-start;
+        }
+        
+        .user-time {
+            align-self: flex-end;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background: #1e293b;
+            border-top: 1px solid #334155;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 30px;
+            background: #334155;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+        }
+        
+        .send-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .send-btn:hover {
+            background: #2563eb;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 80px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .chatbot-popup {
+                width: 90%;
+                right: 5%;
+                bottom: 80px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const Chatbot = () => {
+            const [isOpen, setIsOpen] = useState(false);
+            const [messages, setMessages] = useState([
+                { 
+                    text: "Hello! I'm Inovex AI Assistant. How can I help with your onboarding today?", 
+                    sender: "bot",
+                    timestamp: new Date()
+                }
+            ]);
+            const [inputText, setInputText] = useState("");
+            const [isLoading, setIsLoading] = useState(false);
+            const messagesEndRef = useRef(null);
+
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+
+            useEffect(() => {
+                scrollToBottom();
+            }, [messages]);
+
+            const getBotResponse = async (userInput) => {
+                setIsLoading(true);
+                try {
+                    const response = await fetch('http://localhost:8000/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: userInput })
+                    });
+                    
+                    const data = await response.json();
+                    return data.response;
+                } catch (error) {
+                    console.error("Error fetching bot response:", error);
+                    return "I'm having trouble connecting to the server. Please try again later.";
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+
+            const handleSendMessage = async () => {
+                if (inputText.trim() === "") return;
+                
+                const userMessage = inputText;
+                setMessages(prev => [...prev, { 
+                    text: userMessage, 
+                    sender: "user",
+                    timestamp: new Date()
+                }]);
+                setInputText("");
+                
+                const botResponse = await getBotResponse(userMessage);
+                
+                setMessages(prev => [...prev, { 
+                    text: botResponse, 
+                    sender: "bot",
+                    timestamp: new Date()
+                }]);
+            };
+
+            const handleKeyPress = (e) => {
+                if (e.key === "Enter") {
+                    handleSendMessage();
+                }
+            };
+
+            const formatTime = (date) => {
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            };
+
+            return (
+                <div>
+                    <div className="chatbot-icon" onClick={() => setIsOpen(!isOpen)}>
+                        <i className="fas fa-robot"></i>
+                    </div>
+                    
+                    {isOpen && (
+                        <div className="chatbot-popup">
+                            <div className="chat-header">
+                                <h3>Inovex AI Assistant</h3>
+                                <button className="close-btn" onClick={() => setIsOpen(false)}>
+                                    <i className="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div className="chat-messages">
+                                {messages.map((msg, index) => (
+                                    <div key={index} className={`message-container ${msg.sender}`}>
+                                        {msg.sender === "bot" ? (
+                                            <>
+                                                <div className="avatar bot-avatar">
+                                                    <i className="fas fa-robot"></i>
+                                                </div>
+                                                <div className="message-content">
+                                                    <div className="message bot-message">
+                                                        {msg.text}
+                                                    </div>
+                                                    <div className="message-time bot-time">
+                                                        {formatTime(msg.timestamp)}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <div className="message-content">
+                                                    <div className="message user-message">
+                                                        {msg.text}
+                                                    </div>
+                                                    <div className="message-time user-time">
+                                                        {formatTime(msg.timestamp)}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+                                ))}
+                                {isLoading && (
+                                    <div className="message-container">
+                                        <div className="avatar bot-avatar">
+                                            <i className="fas fa-robot"></i>
+                                        </div>
+                                        <div className="message-content">
+                                            <div className="message bot-message">
+                                                <i className="fas fa-circle-notch fa-spin"></i> Thinking...
+                                            </div>
+                                            <div className="message-time bot-time">
+                                                {formatTime(new Date())}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                <div ref={messagesEndRef} />
+                            </div>
+                            <div className="chat-input">
+                                <input
+                                    type="text"
+                                    placeholder="Ask about onboarding..."
+                                    value={inputText}
+                                    onChange={(e) => setInputText(e.target.value)}
+                                    onKeyPress={handleKeyPress}
+                                    disabled={isLoading}
+                                />
+                                <button className="send-btn" onClick={handleSendMessage} disabled={isLoading}>
+                                    <i className="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const App = () => {
+            return (
+                <div>
+                    <div className="container">
+                        <header>
+                            <div className="logo">
+                                <i className="fas fa-brain logo-icon"></i>
+                                <span className="logo-text">INOVEX</span>
+                            </div>
+                            <nav>
+                                <ul>
+                                    <li><a href="#about">About</a></li>
+                                    <li><a href="#handbook">Handbook</a></li>
+                                    <li><a href="#resources">Resources</a></li>
+                                    <li><a href="#contact">Contact</a></li>
+                                </ul>
+                            </nav>
+                        </header>
+
+                        <section className="hero">
+                            <h1>Welcome to Inovex AI</h1>
+                            <p>Where we pioneer cutting-edge AI solutions to transform businesses and empower human creativity.</p>
+                            <button className="btn">Get Started</button>
+                        </section>
+
+                        <section className="features">
+                            <div className="feature-card">
+                                <div className="feature-icon">
+                                    <i className="fas fa-book-open"></i>
+                                </div>
+                                <h3>Onboarding Handbook</h3>
+                                <p>Access our complete employee handbook with all policies, procedures, and resources you need.</p>
+                            </div>
+                            <div className="feature-card">
+                                <div className="feature-icon">
+                                    <i className="fas fa-users"></i>
+                                </div>
+                                <h3>Team Directory</h3>
+                                <p>Connect with your colleagues and find the right people across departments.</p>
+                            </div>
+                            <div className="feature-card">
+                                <div className="feature-icon">
+                                    <i className="fas fa-graduation-cap"></i>
+                                </div>
+                                <h3>Training Resources</h3>
+                                <p>Access training materials, courses, and development programs to accelerate your growth.</p>
+                            </div>
+                        </section>
+
+                        <section className="features">
+                            <div className="feature-card">
+                                <div className="feature-icon">
+                                    <i className="fas fa-tools"></i>
+                                </div>
+                                <h3>Tools & Software</h3>
+                                <p>Get access to all the tools and software you'll need for your role at Inovex.</p>
+                            </div>
+                            <div className="feature-card">
+                                <div className="feature-icon">
+                                    <i className="fas fa-calendar-alt"></i>
+                                </div>
+                                <h3>Company Calendar</h3>
+                                <p>Stay up to date with company events, meetings, and important dates.</p>
+                            </div>
+                            <div className="feature-card">
+                                <div className="feature-icon">
+                                    <i className="fas fa-question-circle"></i>
+                                </div>
+                                <h3>Support</h3>
+                                <p>Find help for IT issues, HR questions, and other support needs.</p>
+                            </div>
+                        </section>
+                    </div>
+
+                    <footer>
+                        <div className="container">
+                            <p>© 2023 Inovex AI. All rights reserved.</p>
+                            <p>Contact: hr@inovex.com | +1-555-1001</p>
+                        </div>
+                    </footer>
+
+                    <Chatbot />
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
